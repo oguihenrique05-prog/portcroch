@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>50 Receitas Passo a Passo - Porta Maternidade em Crochê</title>
+    <!-- Tailwind CSS para estilização rápida e moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display (Serif Elegante) e Inter (Clean Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+        
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand: '#FAF8F5', // Creme ninho suave e aconchegante de fundo
+                        clay: '#FB6F92', // Rosa Algodão Doce / Chiclete para botões (CTA) e conversão
+                        sage: {
+                            50: '#F0F7FF',  // Azul céu de bebê clarinho
+                            100: '#E0F2FE', // Azul fralda suave
+                            200: '#BAE6FD', // Azul nuvem infantil
+                            500: '#38BDF8', // Azul celeste vivo
+                            600: '#0284C7', // Azul acolhedor para pequenos destaques
+                            700: '#0369A1', // Azul marinho clássico de enxoval para títulos e força visual
+                        },
+                        charcoal: '#2D333F', // Cinza suave escuro para leitura confortável
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-shadow {
+            box-shadow: 0 10px 30px -10px rgba(3, 105, 161, 0.08);
+        }
+        /* Estilos da Esteira Infinita Contínua */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 30s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+    </style>
+    <!-- Script de Rastreamento Adicionado Sem Modificações -->
+    <script>
+    (function () {
+      "use strict";
+      var API_BASE = "https://brain-saas.vercel.app";
+      var PIXEL_PUBLIC_KEY = "px_D7XBCpYqp6dO4nTz";
+      var prefix = ["https://lastlink.com","lastlink.com","www.lastlink.com","https://kirvano.com","https://pay.kirvano.com","https://checkout.kirvano.com","pay.yampi.com.br"];
+      var TRACK_URL = API_BASE.replace(/\/$/, "") + "/api/track";
+      var MCAPI_DEBUG = true;
+
+      function getCookie(name) {
+        var match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+        return match ? decodeURIComponent(match[2]) : null;
+      }
+
+      function setCookie(name, value, days) {
+        var d = new Date();
+        d.setTime(d.getTime() + (days || 365) * 24 * 60 * 60 * 1000);
+        document.cookie =
+          name + "=" + encodeURIComponent(value) +
+          "; path=/; expires=" + d.toUTCString() + "; SameSite=Lax";
+      }
+
+      function uuid() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+          var r = (Math.random() * 16) | 0;
+          var v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+
+      function getOrCreateSid() {
+        var sid = getCookie("mcapi_sid");
+        if (!sid) {
+          sid = uuid();
+          setCookie("mcapi_sid", sid, 365);
+        }
+        return sid;
+      }
+
+      function getQueryParam(name) {
+        try {
+          return new URL(location.href).searchParams.get(name);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function ensureFbp() {
+        var existing = getCookie("_fbp");
+        if (existing) return existing;
+
+        var fbp = "fb.1." + Date.now() + "." + Math.floor(Math.random() * 1e16);
+        setCookie("_fbp", fbp, 90);
+        return fbp;
+      }
+
+      function ensureFbc() {
+        var existing = getCookie("_fbc");
+        if (existing) return existing;
+
+        var fbclid = getQueryParam("fbclid");
+        if (!fbclid) return null;
+
+        var fbc = "fb.1." + Date.now() + "." + fbclid;
+        setCookie("_fbc", fbc, 90);
+        return fbc;
+      }
+
+      function safeResolveUrl(href) {
+        var resolved = href;
+        try { resolved = new URL(href, location.href).href; } catch (e) {}
+        return resolved;
+      }
+
+      function looksLikeCheckout(url) {
+        url = String(url || "");
+        for (var j = 0; j < prefix.length; j++) {
+          if (url.indexOf(prefix[j]) !== -1) return true;
+        }
+        var low = url.toLowerCase();
+        if (low.indexOf("checkout") !== -1 || low.indexOf("pay") !== -1 || low.indexOf("payment") !== -1) return true;
+        return false;
+      }
+
+      function buildUtms() {
+        var r = new URL(location.href);
+        var sid = getOrCreateSid();
+        var out = {};
+
+        out.utm_source = r.searchParams.get("utm_source") || "direto";
+        out.utm_term = "sid:" + sid;
+        out.sid = sid;
+        out.mcapi_sid = sid;
+
+        if (r.searchParams.get("utm_medium")) out.utm_medium = r.searchParams.get("utm_medium");
+        if (r.searchParams.get("utm_campaign")) out.utm_campaign = r.searchParams.get("utm_campaign");
+        if (r.searchParams.get("utm_content")) out.utm_content = r.searchParams.get("utm_content");
+        if (r.searchParams.get("fbclid")) out.fbclid = r.searchParams.get("fbclid");
+
+        return out;
+      }
+
+      function applyUtmsToUrl(resolvedUrl, utms, forceUtmTerm) {
+        try {
+          var u = new URL(resolvedUrl);
+
+          for (var key in utms) {
+            if (!utms.hasOwnProperty(key)) continue;
+            if (!utms[key]) continue;
+            if (key === "sid" || key === "mcapi_sid") {
+              u.searchParams.set(key, utms[key]);
+              continue;
+            }
+
+            if (key === "utm_term") {
+              if (forceUtmTerm) u.searchParams.set("utm_term", utms.utm_term);
+              else if (!u.searchParams.get("utm_term")) u.searchParams.set("utm_term", utms.utm_term);
+              continue;
+            }
+
+            if (!u.searchParams.get(key)) u.searchParams.set(key, utms[key]);
+          }
+
+          return u.toString();
+        } catch (e) {
+          return resolvedUrl;
+        }
+      }
+
+      function sendEvent(payload) {
+        try {
+          if (navigator.sendBeacon) {
+            var blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+            navigator.sendBeacon(TRACK_URL, blob);
+            return;
+          }
+        } catch (e) {}
+
+        fetch(TRACK_URL, {
+          method: "POST",
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(function(){});
+      }
+
+      function postEvent(eventName) {
+        var sid = getOrCreateSid();
+
+        var payload = {
+          pixel_id: PIXEL_PUBLIC_KEY,
+          sid: sid,
+          event: eventName,
+          event_id: eventName + "_" + sid + "_" + Date.now(),
+          url: location.href,
+          utm: buildUtms(),
+          fbp: ensureFbp(),
+          fbc: ensureFbc()
+        };
+
+        sendEvent(payload);
+      }
+
+      function updateLinks() {
+        var utms = buildUtms();
+        var sid = utms.sid || getOrCreateSid();
+        var anchors = document.querySelectorAll("a[href]");
+        for (var i = 0; i < anchors.length; i++) {
+          var a = anchors[i];
+          var href = a.getAttribute("href") || "";
+          if (!href) continue;
+
+          var resolved = safeResolveUrl(href);
+          if (!looksLikeCheckout(resolved)) continue;
+
+          var decoratedUrl = applyUtmsToUrl(resolved, utms, true);
+          if (MCAPI_DEBUG && decoratedUrl !== resolved) {
+            console.log("SID atual:", sid);
+            console.log("Link original:", resolved);
+            console.log("Link modificado:", decoratedUrl);
+          }
+          a.href = decoratedUrl;
+        }
+      }
+
+      function init() {
+        ensureFbp();
+        if (MCAPI_DEBUG) console.log("[mcapi] SID na página (cookie mcapi_sid):", getOrCreateSid());
+        updateLinks();
+        postEvent("PageView");
+
+        var tries = 0;
+        var t = setInterval(function () {
+          tries++;
+          updateLinks();
+          if (tries >= 10) clearInterval(t);
+        }, 1000);
+
+        if (window.MutationObserver) {
+          var mo = new MutationObserver(function () { updateLinks(); });
+          mo.observe(document.documentElement, { childList: true, subtree: true });
+        }
+      }
+
+      document.addEventListener("click", function (e) {
+        var el = e.target;
+        var a = el && el.closest ? el.closest("a") : null;
+        if (!a) return;
+
+        var href = a.getAttribute("href") || "";
+        if (!href) return;
+
+        var resolved = safeResolveUrl(href);
+        if (!looksLikeCheckout(resolved)) return;
+
+        var utms = buildUtms();
+        var sidClick = utms.sid || getOrCreateSid();
+        var decoratedClick = applyUtmsToUrl(resolved, utms, true);
+        if (MCAPI_DEBUG) {
+          console.log("SID atual:", sidClick);
+          console.log("Link original:", resolved);
+          console.log("Link modificado:", decoratedClick);
+        }
+        a.href = decoratedClick;
+
+        postEvent("InitiateCheckout");
+      }, true);
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    })();
+    </script>
+</head>
+<body class="bg-sand text-charcoal font-sans antialiased">
+
+    <!-- Faixa de Urgência / Oferta Especial -->
+    <div class="bg-sage-700 text-white text-xs md:text-sm py-2.5 px-4 text-center font-medium tracking-wide">
+        👶 OFERTA DE LANÇAMENTO: 50 receitas passo a passo de porta maternidade em crochê por apenas R$ 10,00!
+    </div>
+
+    <!-- Header Simples -->
+    <header class="py-5 px-4 max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <span class="font-serif text-2xl font-bold tracking-wide text-sage-700">Receitas <span class="text-clay">Passo a Passo</span></span>
+        </div>
+        <div>
+            <a href="#ofertas" class="bg-sage-600 hover:bg-sage-700 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-md">
+                Acessar Receitas
+            </a>
+        </div>
+    </header>
+
+    <!-- SEÇÃO 1: VENDA IMEDIATA -->
+    <section class="py-8 md:py-16 px-4 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+            
+            <div class="md:col-span-7 space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-sage-100 text-sage-700 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                    <span class="w-2 h-2 bg-sage-500 rounded-full animate-ping"></span>
+                    <span>Acesso Imediato • 100% Digital</span>
+                </div>
+                
+                <h1 class="font-serif text-3xl md:text-5xl lg:text-6xl text-sage-700 font-bold leading-tight">
+                    50 receitas passo a passo de porta maternidade em croche
+                </h1>
+                
+                <p class="text-base md:text-lg text-gray-600 leading-relaxed font-light">
+                    Produza e entregue as peças mais cobiçadas pelas grávidas hoje mesmo usando receitas exatas ponto a ponto, sem o estresse de desmanchar carreiras inteiras ou perder o fio da meada tentando adivinhar pontos por fotos.
+                </p>
+
+                <ul class="space-y-3.5 pt-2">
+                    <li class="flex items-start gap-3"><span class="bg-sage-100 text-sage-700 p-1 rounded-full text-xs font-bold shrink-0">✓</span><span class="text-sm md:text-base text-gray-700 font-medium">Contagens exatas ponto a ponto sem erros de execução.</span></li>
+                    <li class="flex items-start gap-3"><span class="bg-sage-100 text-sage-700 p-1 rounded-full text-xs font-bold shrink-0">✓</span><span class="text-sm md:text-base text-gray-700 font-medium">Zero desperdício de fios e novelos de alta qualidade.</span></li>
+                    <li class="flex items-start gap-3"><span class="bg-sage-100 text-sage-700 p-1 rounded-full text-xs font-bold shrink-0">✓</span><span class="text-sm md:text-base text-gray-700 font-medium">Modelos organizados pelos temas que as grávidas mais pedem hoje.</span></li>
+                    <li class="flex items-start gap-3"><span class="bg-sage-100 text-sage-700 p-1 rounded-full text-xs font-bold shrink-0">✓</span><span class="text-sm md:text-base text-gray-700 font-medium">Esqueça a adivinhação por zoom: siga a lista de materiais exata e suba as carreiras.</span></li>
+                </ul>
+
+                <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
+                    <a href="#ofertas" class="w-full sm:w-auto bg-clay hover:bg-opacity-95 text-white text-center px-8 py-4.5 rounded-full font-bold text-lg transition-all transform hover:-translate-y-0.5 shadow-lg">
+                        QUERO ACESSAR AS 50 RECEITAS AGORA
+                    </a>
+                    <span class="text-xs text-gray-500 flex items-center gap-2">
+                        🔒 Checkout Seguro & Download Instantâneo
+                    </span>
+                </div>
+            </div>
+
+            <div class="md:col-span-5 flex justify-center items-center w-full">
+                <img src="./image_eb388a.webp" 
+                     alt="50 Receitas Passo a Passo Porta Maternidade em Crochê" 
+                     class="w-full max-w-md h-auto block transition-transform duration-500 hover:scale-[1.01]" 
+                     loading="eager">
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SEÇÃO 2: ESTEIRA INFINITA -->
+    <section class="bg-white py-16 border-y border-sage-100">
+        <div class="relative w-full overflow-hidden bg-white py-2 border-y border-sage-50 select-none">
+            <div class="animate-marquee">
+                <img src="./carrossel1.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel2.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel3.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel4.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel5.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel6.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel7.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <!-- Duplicata -->
+                <img src="./carrossel1.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel2.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel3.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel4.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel5.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel6.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+                <img src="./carrossel7.webp" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover flex-shrink-0">
+            </div>
+        </div>
+    </section>
+
+    <!-- BÔNUS -->
+    <section class="py-16 px-4 max-w-6xl mx-auto space-y-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <img src="./imagem5.webp" class="rounded-3xl custom-shadow">
+            <img src="./imagem6.webp" class="rounded-3xl custom-shadow">
+            <img src="./imagem7.webp" class="rounded-3xl custom-shadow">
+        </div>
+    </section>
+
+    <!-- OFERTAS E PERGUNTAS FREQUENTES (MANTIDAS) -->
+                     class="w-full max-w-md h-auto block transition-transform duration-500 hover:scale-[1.01]" 
+                     loading="eager">
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SEÇÃO 2: DEMONSTRATIVO DO PRODUTO (ESTEIRA INFINITA COM 7 IMAGENS PURAS - IGUAL AO SABONETE) -->
+    <section class="bg-white py-16 border-y border-sage-100">
+        <div class="space-y-10">
+            <div class="text-center space-y-3 px-4">
+                <span class="text-xs uppercase tracking-widest text-clay font-bold bg-clay/10 px-3 py-1.5 rounded-full">Transparência e Organização</span>
+                <h2 class="font-serif text-2xl md:text-4xl font-bold text-sage-700">Veja os modelos que você poderá produzir e vender imediatamente</h2>
+                <p class="text-gray-500 max-w-xl mx-auto">Confira como cada ficha de receita é bonita, fácil de ler, organizada e pronta para uso imediato na sua bancada.</p>
+            </div>
+            
+            <!-- Container da Esteira 100% Colada e sem Bordas -->
+            <div class="relative w-full overflow-hidden bg-white py-2 border-y border-sage-50 select-none">
+                <div class="animate-marquee">
+                    <!-- Grupo 1 de Imagens (7 Imagens Reais do Carrossel) -->
+                    <img src="./carrossel1.webp" alt="Ficha de Crochê 1" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel2.webp" alt="Ficha de Crochê 2" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel3.webp" alt="Ficha de Crochê 3" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel4.webp" alt="Ficha de Crochê 4" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel5.webp" alt="Ficha de Crochê 5" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel6.webp" alt="Ficha de Crochê 6" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel7.webp" alt="Ficha de Crochê 7" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+
+                    <!-- Grupo 2 de Imagens (Duplicata para loop contínuo) -->
+                    <img src="./carrossel1.webp" alt="Ficha de Crochê 1" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel2.webp" alt="Ficha de Crochê 2" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel3.webp" alt="Ficha de Crochê 3" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel4.webp" alt="Ficha de Crochê 4" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel5.webp" alt="Ficha de Crochê 5" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel6.webp" alt="Ficha de Crochê 6" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel7.webp" alt="Ficha de Crochê 7" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 3: BENEFÍCIOS -->
+    <section class="py-16 px-4 max-w-4xl mx-auto text-center space-y-6">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold text-sage-700">O que você ganha com a coleção?</h2>
+        <div class="w-16 h-1 bg-clay mx-auto rounded-full"></div>
+        <p class="text-base md:text-xl text-gray-600 font-light leading-relaxed max-w-3xl mx-auto">
+            Pensado para o seu Lucro: Receitas 100% validadas usando fios e materiais acessíveis e de altíssima saída comercial. Vá a um armarinho hoje, compre o que precisa e inicie a sua produção na mesma tarde.
+        </p>
+    </section>
+
+    <!-- SEÇÃO 4: HEADLINE E URGÊNCIA (ALTO IMPACTO) -->
+    <section class="bg-sage-700 text-white py-16 px-4 text-center">
+        <div class="max-w-3xl mx-auto space-y-6">
+            <h2 class="font-serif text-2xl md:text-4xl font-bold leading-tight">
+                Pare de desmanchar carreiras inteiras de trabalho ou perder o fio da meada tentando adivinhar pontos por fotos do Instagram. Comece a produzir hoje mesmo apenas copiando receitas exatas.
+            </h2>
+            <p class="text-base md:text-lg text-sage-100 font-light leading-relaxed max-w-2xl mx-auto">
+                Aumente as suas encomendas e o seu catálogo tendo os melhores modelos de maternidade em mãos hoje mesmo.
+            </p>
+            <div class="pt-4">
+                <a href="#ofertas" class="inline-block bg-clay hover:bg-opacity-95 text-white px-8 py-4 rounded-full font-bold text-lg transition-all transform hover:-translate-y-0.5 shadow-lg">
+                    QUERO AS RECEITAS TESTADAS HOJE
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 5: IDEAL PARA VOCÊ QUE DESEJA... (QUALIFICAÇÃO) -->
+    <section class="py-16 px-4 max-w-5xl mx-auto">
+        <div class="text-center space-y-3 mb-12">
+            <h2 class="font-serif text-2xl md:text-4xl font-bold text-sage-700">Esse material é ideal para você que deseja:</h2>
+            <p class="text-gray-500">Desenvolvido sob medida para quem busca profissionalismo, agilidade e lucratividade manual.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-8 rounded-3xl custom-shadow border border-sage-50 space-y-4">
+                <div class="w-12 h-12 bg-sage-50 text-sage-700 rounded-2xl flex items-center justify-center font-bold text-xl">🚀</div>
+                <h3 class="font-serif text-lg font-bold text-sage-700">Expandir seu catálogo imediatamente</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">Adicione 50 novos temas de portas maternidade de uma só vez no seu ateliê, sem precisar o estresse de desmanchar ou adivinhar receitas do zero.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl custom-shadow border border-sage-50 space-y-4">
+                <div class="w-12 h-12 bg-sage-50 text-sage-700 rounded-2xl flex items-center justify-center font-bold text-xl">✨</div>
+                <h3 class="font-serif text-lg font-bold text-sage-700">Apresentar modelos profissionais</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">Mostre fotos e composições de cores impecáveis, transmitindo extrema autoridade, luxo e capricho nas suas redes sociais e ateliê.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl custom-shadow border border-sage-50 space-y-4">
+                <div class="w-12 h-12 bg-sage-50 text-sage-700 rounded-2xl flex items-center justify-center font-bold text-xl">🛡️</div>
+                <h3 class="font-serif text-lg font-bold text-sage-700">Atender com total segurança</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">Ofereça portas maternidade específicos para grávidas sabendo exatamente a metragem de fio que vai gastar e o tempo de confecção de cada peça.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 6: TUDO O QUE VOCÊ VAI RECEBER -->
+    <section class="bg-sand py-16 px-4 border-y border-sage-100">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <div class="space-y-3">
+                <span class="text-xs uppercase tracking-widest text-clay font-bold">O Que Está Incluso</span>
+                <h2 class="font-serif text-2xl md:text-4xl font-bold text-sage-700">Tudo foi organized para a sua facilidade</h2>
+            </div>
+            
+            <div class="bg-white p-8 md:p-10 rounded-3xl custom-shadow border border-sage-100 text-left space-y-6">
+                <p class="text-base md:text-lg text-gray-600 leading-relaxed font-light">
+                    Você vai receber um arquivo digital em PDF contendo as <strong>50 fichas técnicas detalhadas de execução</strong> com lista de linhas, cores exatas, quantidade de pontos e as instruções passo a passo para cada enfeite de porta maternidade.
+                </p>
+                <div class="border-t border-sage-100 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-sand rounded-2xl border border-sage-100">
+                        <span class="block text-2xl font-bold text-clay">50</span>
+                        <span class="text-xs text-gray-500 uppercase font-semibold tracking-wider">Fichas Técnicas</span>
+                    </div>
+                    <div class="p-4 bg-sand rounded-2xl border border-sage-100">
+                        <span class="block text-2xl font-bold text-clay">100%</span>
+                        <span class="text-xs text-gray-500 uppercase font-semibold tracking-wider">Contagem Exata</span>
+                    </div>
+                    <div class="p-4 bg-sand rounded-2xl border border-sage-100">
+                        <span class="block text-2xl font-bold text-clay">PDF</span>
+                        <span class="text-xs text-gray-500 uppercase font-semibold tracking-wider">Envio Digital Rápido</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 7: BÔNUS EXCLUSIVOS (APENAS PARA ESTA TURMA - COM IMAGENS LIMPAS DO SABONETE) -->
+    <section class="py-16 px-4 max-w-6xl mx-auto space-y-12">
+        <div class="text-center space-y-4">
+            <span class="text-xs uppercase tracking-widest text-clay font-bold bg-clay/10 px-3 py-1.5 rounded-full">Acelere Suas Vendas</span>
+            <h2 class="font-serif text-2xl md:text-4xl font-bold text-sage-700">Ferramentas exclusivas para acelerar a sua produção</h2>
+            <p class="text-gray-500 max-w-lg mx-auto">Esses complementos resolvem suas maiores dificuldades e valorizam o seu trabalho manual na hora da venda.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Bônus 1: Guia de Precificação Sem Medo -->
+            <div class="bg-white rounded-3xl overflow-hidden custom-shadow border border-sage-100 flex flex-col justify-between">
+                <div class="p-4 pb-0 relative">
+                    <img src="./imagem5.webp" 
+                         alt="Guia de Precificação Rápida" 
+                         class="w-full h-auto rounded-2xl block shadow-sm">
+                    <span class="absolute top-6 left-6 bg-clay text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">Grátis</span>
+                </div>
+                <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider text-clay font-bold">Bônus 1</span>
+                        <h3 class="font-serif text-xl font-bold text-sage-700">Guia de Precificação Sem Medo</h3>
+                        <p class="text-sm text-gray-600 font-light leading-relaxed mt-2">
+                            Aprenda a calcular de forma simples o custo real do novelo, o valor justo da sua hora de trabalho e coloque a margem de lucro correta nas suas peças.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bônus 2: Roteiro de WhatsApp para Fechar Encomendas -->
+            <div class="bg-white rounded-3xl overflow-hidden custom-shadow border border-sage-100 flex flex-col justify-between">
+                <div class="p-4 pb-0 relative">
+                    <img src="./imagem6.webp" 
+                         alt="Roteiro de Atendimento no WhatsApp" 
+                         class="w-full h-auto rounded-2xl block shadow-sm">
+                    <span class="absolute top-6 left-6 bg-clay text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">Grátis</span>
+                </div>
+                <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider text-clay font-bold">Bônus 2</span>
+                        <h3 class="font-serif text-xl font-bold text-sage-700">Roteiro de Fechamento de Encomendas</h3>
+                        <p class="text-sm text-gray-600 font-light leading-relaxed mt-2">
+                            O script exato em texto para responder quando uma mãe perguntar "qual o valor?", valorizando o seu crochê e fechando o pedido sem vergonha ou gaguejar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bônus 3: Pack de Divulgação Antecipada -->
+            <div class="bg-white rounded-3xl overflow-hidden custom-shadow border border-sage-100 flex flex-col justify-between">
+                <div class="p-4 pb-0 relative">
+                    <img src="./imagem7.webp" 
+                         alt="Pack de Imagens de Divulgação" 
+                         class="w-full h-auto rounded-2xl block shadow-sm">
+                    <span class="absolute top-6 left-6 bg-clay text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-sm">Grátis</span>
+                </div>
+                <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs uppercase tracking-wider text-clay font-bold">Bônus 3</span>
+                        <h3 class="font-serif text-xl font-bold text-sage-700">Fotos de Divulgação Profissionais</h3>
+                        <p class="text-sm text-gray-600 font-light leading-relaxed mt-2">
+                            Fotos profissionais e limpas (sem marca d'água) de todos os modelos para você postar nas suas redes sociais e já começar a captar encomendas antes mesmo de tecer.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE DEPOIMENTOS / PROVA SOCIAL AUTOMÁTICA (ESTILO COMENTÁRIOS INSTAGRAM/WHATSAPP) -->
+    <section class="bg-[#FCFAF7] py-16 border-y border-sage-100 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-3 mb-10">
+            <span class="text-xs uppercase tracking-widest text-clay font-bold bg-clay/10 px-3 py-1.5 rounded-full">Quem comprou, aprovou! 💖</span>
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-sage-700">Depoimentos reais de alunas e artesãs</h2>
+            <p class="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">Veja o resultado de quem já garantiu as 50 receitas passo a passo e transformou a produção do ateliê.</p>
+        </div>
+
+        <!-- Esteira 1: Deslizando para a Esquerda (Contém 8 depoimentos) -->
+        <div class="relative w-full overflow-hidden py-3 select-none">
+            <div class="animate-scroll-left gap-4 flex">
+                
+                <!-- Depoimento 1 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-300 to-sky-300 flex items-center justify-center text-white font-bold text-sm shrink-0">JA</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">jocilene_affonso</span>
+                                <p class="mt-1 leading-relaxed">Comprei ontem e já fiz o urso balão! A contagem de pontos é perfeita, não precisei desmanchar nada. Amei de verdade!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🧸</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>2 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">4</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 2 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-300 to-indigo-300 flex items-center justify-center text-white font-bold text-sm shrink-0">RX</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">rosianerxavier</span>
+                                <p class="mt-1 leading-relaxed">Nunca fiz porta maternidade na vida! Com apenas 15 dias usando as receitas passo a passo já fiz meu primeiro safari, ficou maravilhoso. Amando muito!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🦁</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>4 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">8</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 3 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-300 to-amber-300 flex items-center justify-center text-white font-bold text-sm shrink-0">IT</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">iaratejonaildesigner</span>
+                                <p class="mt-1 leading-relaxed">Comprei e adorei! O acesso é na hora por e-mail, as receitas são completas e as fotos bem explicadas. Qualidade de verdade e sem enrolação.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📄</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>9 min</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">2</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 4 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-300 to-teal-300 flex items-center justify-center text-white font-bold text-sm shrink-0">NR</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">nanerocha13</span>
+                                <p class="mt-1 leading-relaxed">Excelente curso! Receitas super detalhadas. Amei o modelo boho de arco-íris, já vou postar as fotos para captar encomendas de grávidas.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🌈</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>4 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">11</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 5 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-300 to-cyan-300 flex items-center justify-center text-white font-bold text-sm shrink-0">SD</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">sou_dependente</span>
+                                <p class="mt-1 leading-relaxed">Sim! É ótimo, eu aprendi super rápido e as apostilas são super organizadas no PDF. Recomendo muito para quem quer viver de crochê.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">☁️</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>58 min</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">5</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 6 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold text-sm shrink-0">CL</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">croche_da_lu</span>
+                                <p class="mt-1 leading-relaxed">Meninas, o bônus de precificação de 17 reais pagou o curso na primeira venda! Eu cobrava muito barato e nem via o lucro entrar.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📊</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>1 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">14</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 7 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-200 to-rose-200 flex items-center justify-center text-white font-bold text-sm shrink-0">AM</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">ateliemimosdafe</span>
+                                <p class="mt-1 leading-relaxed">Só de não precisar ficar dando zoom em fotos do Instagram para tentar adivinhar se tinha aumento ou ponto baixíssimo já valeu o investimento de R$ 17!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🦒</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>3 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">19</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 8 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-200 to-pink-200 flex items-center justify-center text-white font-bold text-sm shrink-0">AD</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">amigurumis_doce_lar</span>
+                                <p class="mt-1 leading-relaxed">A receita da ovelhinha em ponto pipoca é impecável, fofinha e super gostosa de crochetar. Minha cliente de hoje simplesmente amou!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🐑</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>2 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">6</span></span>
+                    </div>
+                </div>
+
+                <!-- Duplicata idêntica dos 8 depoimentos para garantir loop contínuo e sem emendas -->
+                
+                <!-- Dup 1 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-300 to-sky-300 flex items-center justify-center text-white font-bold text-sm shrink-0">JA</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">jocilene_affonso</span>
+                                <p class="mt-1 leading-relaxed">Comprei ontem e já fiz o urso balão! A contagem de pontos é perfeita, não precisei desmanchar nada. Amei de verdade!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🧸</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>2 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">4</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 2 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-300 to-indigo-300 flex items-center justify-center text-white font-bold text-sm shrink-0">RX</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">rosianerxavier</span>
+                                <p class="mt-1 leading-relaxed">Nunca fiz porta maternidade na vida! Com apenas 15 dias usando as receitas passo a passo já fiz meu primeiro safari, ficou maravilhoso. Amando muito!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🦁</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>4 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">8</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 3 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-300 to-amber-300 flex items-center justify-center text-white font-bold text-sm shrink-0">IT</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">iaratejonaildesigner</span>
+                                <p class="mt-1 leading-relaxed">Comprei e adorei! O acesso é na hora por e-mail, as receitas são completas e as fotos bem explicadas. Qualidade de verdade e sem enrolação.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📄</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>9 min</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">2</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 4 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-300 to-teal-300 flex items-center justify-center text-white font-bold text-sm shrink-0">NR</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">nanerocha13</span>
+                                <p class="mt-1 leading-relaxed">Excelente curso! Receitas super detalhadas. Amei o modelo boho de arco-íris, já vou postar as fotos para captar encomendas de grávidas.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🌈</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>4 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">11</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 5 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-300 to-cyan-300 flex items-center justify-center text-white font-bold text-sm shrink-0">SD</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">sou_dependente</span>
+                                <p class="mt-1 leading-relaxed">Sim! É ótimo, eu aprendi super rápido e as apostilas são super organizadas no PDF. Recomendo muito para quem quer viver de crochê.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">☁️</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>58 min</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">5</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 6 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold text-sm shrink-0">CL</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">croche_da_lu</span>
+                                <p class="mt-1 leading-relaxed">Meninas, o bônus de precificação de 17 reais pagou o curso na primeira venda! Eu cobrava muito barato e nem via o lucro entrar.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📊</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>1 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">14</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 7 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-200 to-rose-200 flex items-center justify-center text-white font-bold text-sm shrink-0">AM</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">ateliemimosdafe</span>
+                                <p class="mt-1 leading-relaxed">Só de não precisar ficar dando zoom em fotos do Instagram para tentar adivinhar se tinha aumento ou ponto baixíssimo já valeu o investimento de R$ 17!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🦒</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>3 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">19</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 8 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-200 to-pink-200 flex items-center justify-center text-white font-bold text-sm shrink-0">AD</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">amigurumis_doce_lar</span>
+                                <p class="mt-1 leading-relaxed">A receita da ovelhinha em ponto pipoca é impecável, fofinha e super gostosa de crochetar. Minha cliente de hoje simplesmente amou!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🐑</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>2 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">6</span></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Esteira 2: Deslizando para a Direita (Contém outros 8 depoimentos exclusivos) -->
+        <div class="relative w-full overflow-hidden py-3 mt-4 select-none">
+            <div class="animate-scroll-right gap-4 flex">
+                
+                <!-- Depoimento 9 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-teal-200 to-emerald-200 flex items-center justify-center text-white font-bold text-sm shrink-0">DC</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">danicreations</span>
+                                <p class="mt-1 leading-relaxed">Estava totalmente travada em um modelo que a cliente me pediu. Achei a receita exata aqui na apostila de 50 modelos, fiz no mesmo dia e ela apaixonou!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">💖</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>5 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">7</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 10 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-300 to-indigo-300 flex items-center justify-center text-white font-bold text-sm shrink-0">MM</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">marilia_artes</span>
+                                <p class="mt-1 leading-relaxed">O roteiro de WhatsApp do bônus funciona demais! Uma cliente veio orçar hoje de manhã, usei o script e ela fechou na hora pagando 50% de sinal.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">💬</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>12 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">9</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 11 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-200 to-rose-200 flex items-center justify-center text-white font-bold text-sm shrink-0">SC</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">sonhos_de_croche</span>
+                                <p class="mt-1 leading-relaxed">Muito prático! O design do PDF é impecável e o pack de fotos de divulgação limpas me ajudou a fechar 2 pedidos antes do material chegar.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📸</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>15 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">12</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 12 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-200 to-yellow-200 flex items-center justify-center text-white font-bold text-sm shrink-0">FK</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">fabi_croche_kids</span>
+                                <p class="mt-1 leading-relaxed">Amei que as receitas não têm aqueles termos e siglas que deixam a gente confusa. É tudo detalhado ponto a ponto, fácil de entender!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">✨</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>2 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">5</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 13 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-200 to-sky-200 flex items-center justify-center text-white font-bold text-sm shrink-0">LC</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">lidianecroche</span>
+                                <p class="mt-1 leading-relaxed">Minhas clientes grávidas estão encantadas com o modelo de girafa. É o mais pedido do meu ateliê agora. Melhor investimento de 17 reais!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🦒</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>3 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">18</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 14 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-200 to-indigo-200 flex items-center justify-center text-white font-bold text-sm shrink-0">AN</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">ateliedanona</span>
+                                <p class="mt-1 leading-relaxed">Já comprei cursos caros que só me davam dor de cabeça. Essa apostila é direta ao ponto. Muito mais prática do que dezenas de aulas cansativas!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🧵</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>4 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">22</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 15 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-green-200 to-yellow-200 flex items-center justify-center text-white font-bold text-sm shrink-0">CM</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">claudia_migu</span>
+                                <p class="mt-1 leading-relaxed">O guia de unboxing é maravilhoso! Embalei e perfumei a entrega de hoje exatamente como ensina e a mãe me mandou áudio chorando de emoção.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📦</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>5 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">14</span></span>
+                    </div>
+                </div>
+
+                <!-- Depoimento 16 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-200 to-sky-200 flex items-center justify-center text-white font-bold text-sm shrink-0">BA</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">bella_amigurumi</span>
+                                <p class="mt-1 leading-relaxed">Melhor investimento do ano. Receitas limpas, organizadas e que dão o caimento exato das fotos. O ateliê agradece o capricho!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🌸</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>1 sem</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">31</span></span>
+                    </div>
+                </div>
+
+                <!-- Duplicata idêntica dos outros 8 depoimentos para loop sem costura -->
+                
+                <!-- Dup 9 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-teal-200 to-emerald-200 flex items-center justify-center text-white font-bold text-sm shrink-0">DC</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">danicreations</span>
+                                <p class="mt-1 leading-relaxed">Estava totalmente travada em um modelo que a cliente me pediu. Achei a receita exata aqui na apostila de 50 modelos, fiz no mesmo dia e ela apaixonou!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">💖</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>5 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">7</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 10 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-300 to-indigo-300 flex items-center justify-center text-white font-bold text-sm shrink-0">MM</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">marilia_artes</span>
+                                <p class="mt-1 leading-relaxed">O roteiro de WhatsApp do bônus funciona demais! Uma cliente veio orçar hoje de manhã, usei o script e ela fechou na hora pagando 50% de sinal.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">💬</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>12 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">9</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 11 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-200 to-rose-200 flex items-center justify-center text-white font-bold text-sm shrink-0">SC</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">sonhos_de_croche</span>
+                                <p class="mt-1 leading-relaxed">Muito prático! O design do PDF é impecável e o pack de fotos de divulgação limpas me ajudou a fechar 2 pedidos antes do material chegar.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📸</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>15 h</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">12</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 12 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-200 to-yellow-200 flex items-center justify-center text-white font-bold text-sm shrink-0">FK</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">fabi_croche_kids</span>
+                                <p class="mt-1 leading-relaxed">Amei que as receitas não têm aqueles termos e siglas que deixam a gente confusa. É tudo detalhado ponto a ponto, fácil de entender!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">✨</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>2 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">5</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 13 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-200 to-sky-200 flex items-center justify-center text-white font-bold text-sm shrink-0">LC</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">lidianecroche</span>
+                                <p class="mt-1 leading-relaxed">Minhas clientes grávidas estão encantadas com o modelo de girafa. É o mais pedido do meu ateliê agora. Melhor investimento de 17 reais!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🦒</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>3 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">18</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 14 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-200 to-indigo-200 flex items-center justify-center text-white font-bold text-sm shrink-0">AN</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">ateliedanona</span>
+                                <p class="mt-1 leading-relaxed">Já comprei cursos caros que só me davam dor de cabeça. Essa apostila é direta ao ponto. Muito mais prática do que dezenas de aulas cansativas!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🧵</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>4 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">22</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 15 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-green-200 to-yellow-200 flex items-center justify-center text-white font-bold text-sm shrink-0">CM</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">claudia_migu</span>
+                                <p class="mt-1 leading-relaxed">O guia de unboxing é maravilhoso! Embalei e perfumei a entrega de hoje exatamente como ensina e a mãe me mandou áudio chorando de emoção.</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">📦</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>5 d</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">14</span></span>
+                    </div>
+                </div>
+
+                <!-- Dup 16 -->
+                <div class="flex-shrink-0 bg-white rounded-2xl border border-sage-100 p-4 w-[340px] md:w-[380px] custom-shadow flex flex-col justify-between">
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-200 to-sky-200 flex items-center justify-center text-white font-bold text-sm shrink-0">BA</div>
+                            <div class="text-xs text-charcoal">
+                                <span class="font-bold block text-sage-700">bella_amigurumi</span>
+                                <p class="mt-1 leading-relaxed">Melhor investimento do ano. Receitas limpas, organizadas e que dão o caimento exato das fotos. O ateliê agradece o capricho!</p>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-sand flex items-center justify-center border border-sage-100 shrink-0 text-xl">🌸</div>
+                    </div>
+                    <div class="flex items-center gap-4 mt-3 pt-2 border-t border-sage-50 text-[10px] text-gray-400 font-semibold">
+                        <span>1 sem</span>
+                        <button class="hover:text-clay transition-colors">Responder</button>
+                        <span class="ml-auto text-clay flex items-center gap-0.5">❤️ <span class="text-[9px] text-gray-400">31</span></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 8: OFERTAS, VALORES E PLANOS -->
+    <section id="ofertas" class="bg-sand py-16 px-4 border-t border-sage-100">
+        <div class="max-w-4xl mx-auto text-center space-y-4 mb-12">
+            <span class="text-xs uppercase tracking-widest text-clay font-bold">Escolha Seu Acesso</span>
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-sage-700">Comece a produzir hoje mesmo</h2>
+            <p class="text-gray-500 max-w-lg mx-auto">Selecione o plano ideal para a sua produção artesanal.</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            
+            <!-- PLANO BÁSICO (R$ 10,00) -->
+            <div class="bg-white rounded-3xl border border-sage-200 custom-shadow p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:scale-[1.01]">
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs uppercase tracking-wider text-gray-400 font-bold">O Essencial</span>
+                        <h3 class="font-serif text-2xl font-bold text-sage-700">Plano Básico</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Ideal para quem quer apenas a coleção principal de receitas.</p>
+                    </div>
+
+                    <div class="py-4 border-y border-sage-100 space-y-1">
+                        <p class="text-sm text-gray-400 line-through">De R$ 39,90 por</p>
+                        <p class="text-4xl font-serif font-bold text-sage-700">R$ 10,00</p>
+                        <p class="text-xs text-gray-500">pagamento único, sem mensalidades</p>
+                    </div>
+
+                    <!-- Recursos inclusos no Básico -->
+                    <ul class="space-y-3.5 text-left text-sm text-gray-600">
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-sage-600 font-bold">✓</span>
+                            <span>Apostila Digital com as 50 Receitas Prontas</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-sage-600 font-bold">✓</span>
+                            <span>Receitas detalhadas e contagem ponto a ponto</span>
+                        </li>
+                        <li class="flex items-start gap-2.5 text-gray-300 line-through">
+                            <span>✗</span>
+                            <span>Bônus 1: Guia de Precificação Sem Medo</span>
+                        </li>
+                        <li class="flex items-start gap-3 text-gray-300 line-through">
+                            <span>✗</span>
+                            <span>Bônus 2: Roteiro WhatsApp para Encomendas</span>
+                        </li>
+                        <li class="flex items-start gap-2.5 text-gray-300 line-through">
+                            <span>✗</span>
+                            <span>Bônus 3: Imagens de Divulgação Profissionais</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pt-8 space-y-3">
+                    <a href="https://kirvano.com/checkout/basico" target="_blank" class="block w-full bg-sage-100 hover:bg-sage-200 text-sage-700 text-center py-3.5 rounded-full font-bold text-sm transition-all uppercase tracking-wider">
+                        ADQUIRIR PLANO BÁSICO
+                    </a>
+                    <p class="text-[10px] text-gray-400 text-center">🔒 Compra Segura e Entrega Instantânea</p>
+                </div>
+            </div>
+
+            <!-- PLANO COMPLETO (R$ 17,00) -->
+            <div class="bg-white rounded-3xl border-2 border-clay custom-shadow p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-xl">
+                <!-- Badge de Recomendado -->
+                <div class="absolute top-4 right-4 bg-clay text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full shadow-xs">
+                    Mais Vendido ⭐
+                </div>
+
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs uppercase tracking-wider text-clay font-bold">Recomendado</span>
+                        <h3 class="font-serif text-2xl font-bold text-sage-700">Plano Completo</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Leve o acervo completo de receitas + todas as ferramentas estratégicas e bônus.</p>
+                    </div>
+
+                    <div class="py-4 border-y border-sage-100 space-y-1">
+                        <p class="text-sm text-gray-400 line-through">De R$ 97,00 por</p>
+                        <p class="text-4xl font-serif font-bold text-clay">R$ 17,00</p>
+                        <p class="text-xs text-gray-500">ou em até 3x de R$ 5,95 no cartão</p>
+                    </div>
+
+                    <!-- Espaço para o Mockup do Plano Premium -->
+                    <div class="flex justify-center items-center py-2 w-full">
+                        <div class="w-full max-w-[220px] bg-sand rounded-xl p-4 border border-sage-100 flex flex-col items-center justify-between text-center relative overflow-hidden h-32 shadow-sm">
+                            <div class="absolute -top-6 -right-6 w-12 h-12 bg-clay/10 rounded-full"></div>
+                            <span class="text-[8px] font-bold text-clay uppercase tracking-wider">Completo + Bônus</span>
+                            <div class="my-auto flex flex-col items-center">
+                                <span class="text-lg">👶</span>
+                                <span class="font-serif font-bold text-sage-700 text-xs">50 Receitas + 4 Bônus</span>
+                            </div>
+                            <span class="text-[9px] text-emerald-600 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full">ACESSO TOTAL</span>
+                        </div>
+                    </div>
+
+                    <!-- Recursos inclusos no Completo -->
+                    <ul class="space-y-3.5 text-left text-sm text-gray-600">
+                        <li class="flex items-start gap-2.5 font-semibold text-gray-800">
+                            <span class="text-clay font-bold">✓</span>
+                            <span>Apostila Digital com as 50 Receitas Prontas</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-clay font-bold">✓</span>
+                            <span>Receitas detalhadas e contagem ponto a ponto</span>
+                        </li>
+                        <li class="flex items-start gap-2.5 font-medium text-sage-700">
+                            <span class="text-clay font-bold">✓</span>
+                            <span>🎁 Bônus 1: Guia de Precificação Sem Medo</span>
+                        </li>
+                        <li class="flex items-start gap-2.5 font-medium text-sage-700">
+                            <span class="text-clay font-bold">✓</span>
+                            <span>🎁 Bônus 2: WhatsApp para Fechar Encomendas</span>
+                        </li>
+                        <li class="flex items-start gap-2.5 font-medium text-sage-700">
+                            <span class="text-clay font-bold">✓</span>
+                            <span>🎁 Bônus 3: Imagens de Divulgação Profissionais</span>
+                        </li>
+                        <li class="flex items-start gap-2.5 font-medium text-sage-700">
+                            <span class="text-clay font-bold">✓</span>
+                            <span>🎁 Bônus 4: Detalhes de Encantamento & Unboxing</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pt-8 space-y-3">
+                    <a href="https://kirvano.com/checkout/completo" target="_blank" class="block w-full bg-clay hover:bg-opacity-95 text-white text-center py-4 rounded-full font-bold text-base transition-all transform hover:-translate-y-0.5 shadow-lg uppercase tracking-wider">
+                        QUERO O PLANO COMPLETO
+                    </a>
+                    <p class="text-[10px] text-gray-400 text-center">🔒 Seus dados criptografados e compra 100% segura.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Selo Garantia -->
+        <div class="max-w-xl mx-auto mt-12 flex items-center gap-4 text-left p-6 bg-white rounded-3xl border border-sage-200 custom-shadow">
+            <div class="text-4xl shrink-0">🛡️</div>
+            <div class="space-y-0.5">
+                <h4 class="font-bold text-sage-700 text-sm">Garantia Incondicional de 7 dias</h4>
+                <p class="text-xs text-gray-500 leading-relaxed">Se por qualquer motivo você achar que as receitas não vão facilitar a sua produção no ateliê, devolvemos todo o seu investmento imediatamente.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 9: PERGUNTAS FREQUENTES (FAQ) -->
+    <section class="py-16 px-4 max-w-3xl mx-auto space-y-8">
+        <div class="text-center space-y-3">
+            <span class="text-xs uppercase tracking-widest text-clay font-bold">Dúvidas Frequentes</span>
+            <h2 class="font-serif text-2xl md:text-3xl font-bold text-sage-700">Perguntas Frequentes</h2>
+        </div>
+
+        <div class="space-y-4">
+            <details class="group bg-white rounded-2xl border border-sage-100 p-6 [&_summary::-webkit-details-marker]:hidden custom-shadow cursor-pointer">
+                <summary class="flex justify-between items-center text-left">
+                    <h3 class="font-serif font-bold text-sage-700 text-base md:text-lg">Como recebo o material?</h3>
+                    <span class="text-clay text-xl font-bold group-open:rotate-180 transition-transform duration-200">+</span>
+                </summary>
+                <p class="mt-4 text-sm text-gray-600 leading-relaxed font-light">
+                    O acesso é imediato via e-mail. Assim que o pagamento for aprovado (Pix ou Cartão de Crédito), você receberá o link para download direto de todo o material em formato digital PDF.
+                </p>
+            </details>
+
+            <details class="group bg-white rounded-2xl border border-sage-100 p-6 [&_summary::-webkit-details-marker]:hidden custom-shadow cursor-pointer">
+                <summary class="flex justify-between items-center text-left">
+                    <h3 class="font-serif font-bold text-sage-700 text-base md:text-lg">Eu preciso ser avançada no crochê?</h3>
+                    <span class="text-clay text-xl font-bold group-open:rotate-180 transition-transform duration-200">+</span>
+                </summary>
+                <p class="mt-4 text-sm text-gray-600 leading-relaxed font-light">
+                    Não! Se você já conhece os pontos básicos do crochê (correntinha, ponto baixo, aumento, diminuição) e sabe ler receitas simples, você vai conseguir seguir o passo a passo com total tranquilidade, pois a contagem é totalmente detalhada e ponto a ponto.
+                </p>
+            </details>
+
+            <details class="group bg-white rounded-2xl border border-sage-100 p-6 [&_summary::-webkit-details-marker]:hidden custom-shadow cursor-pointer">
+                <summary class="flex justify-between items-center text-left">
+                    <h3 class="font-serif font-bold text-sage-700 text-base md:text-lg">Posso vender as peças prontas?</h3>
+                    <span class="text-clay text-xl font-bold group-open:rotate-180 transition-transform duration-200">+</span>
+                </summary>
+                <p class="mt-4 text-sm text-gray-600 leading-relaxed font-light">
+                    Com certeza! Todas as peças físicas que você produzir através desta apostila digital são de sua total propriedade para vender e lucrar no seu ateliê.
+                </p>
+            </details>
+
+            <details class="group bg-white rounded-2xl border border-sage-100 p-6 [&_summary::-webkit-details-marker]:hidden custom-shadow cursor-pointer">
+                <summary class="flex justify-between items-center text-left">
+                    <h3 class="font-serif font-bold text-sage-700 text-base md:text-lg">Tem garantia?</h3>
+                    <span class="text-clay text-xl font-bold group-open:rotate-180 transition-transform duration-200">+</span>
+                </summary>
+                <p class="mt-4 text-sm text-gray-600 leading-relaxed font-light">
+                    Sim, você tem 7 dias de garantia incondicional. Se não gostar do material ou achar que as receitas não vão facilitar sua produção, basta nos enviar um e-mail para receber o reembolso integral.
+                </p>
+            </details>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 10: RODAPÉ -->
+    <footer class="bg-charcoal text-gray-400 py-12 px-4 text-center space-y-6 border-t border-sage-100">
+        <div class="max-w-4xl mx-auto space-y-4">
+            <span class="font-serif text-2xl font-bold tracking-wide text-white">50 Receitas <span class="text-clay">Passo a Passo</span></span>
+            <p class="text-[11px] max-w-2xl mx-auto leading-relaxed text-gray-500">
+                Aviso Legal: O compilado de 50 receitas de portas maternidade em crochê possui caráter de apoio à produção artesanal. Todas as receitas foram validadas no ateliê. Os lucros descritos são estimativas calculadas sobre médias do mercado de artesanato, variando conforme a precificação e divulgação de cada artesã.
+            </p>
+            <p class="text-xs text-gray-500">
+                &copy; 2026 50 Receitas Passo a Passo Ltda. Todos os direitos reservados.
+            </p>
+            <div class="flex justify-center space-x-4 text-xs font-medium text-gray-400 pt-2">
+                <a href="#" class="hover:text-white transition-colors">Políticas de Privacidade</a>
+                <span>|</span>
+                <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
+                <span>|</span>
+                <span class="text-gray-500">Suporte: contato@colecaopremium.com.br</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
