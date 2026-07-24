@@ -1,3 +1,49 @@
+ChatGPT
+
+
+
+
+
+chat
+
+Fala! 👊
+Manda o que você precisa.
+
+
+
+Texto colado(15).txt
+Documento
+abre esse html aqui em um preview 
+
+Pronto. Converti o arquivo para HTML mantendo o código enviado. 
+
+
+preview_porta_maternidade.html
+
+Observação: as imagens como image_eb388a.webp, carrossel1.webp, imagem5.webp etc. só vão aparecer se esses arquivos também estiverem na mesma pasta do HTML.
+
+
+
+Repara que existe 2 carrosseis, eu adicionei as imagens porem o segundo carrossel ele replica as imagens do primeiro carrossel, eu queria mudar isso queria que o segundo carrossel seja imagens diferentes em webp tambem queri colocar 7 imagens la 
+
+faz essa alteracao 
+
+Pensou por 11s
+Feito. Agora os dois carrosséis são independentes:
+
+1º carrossel: carrossel1.webp até carrossel7.webp
+
+2º carrossel: carrossel8.webp até carrossel14.webp
+
+Mantive a duplicação interna do segundo conjunto para o loop infinito continuar funcionando sem cortes.
+
+preview_porta_maternidade.html
+
+Agora é só colocar na mesma pasta do HTML estas 7 novas imagens:
+
+carrossel8.webp, carrossel9.webp, carrossel10.webp, carrossel11.webp, carrossel12.webp, carrossel13.webp e carrossel14.webp.
+
+
 
 
 <!DOCTYPE html>
@@ -177,22 +223,22 @@
             <div class="relative w-full overflow-hidden bg-white py-2 border-y border-sage-50 select-none">
                 <div class="animate-marquee">
                     <!-- Grupo 1 de Imagens (7 Imagens Reais do Carrossel) -->
-                    <img src="./carrossel1.webp" alt="Ficha de Crochê 1" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel2.webp" alt="Ficha de Crochê 2" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel3.webp" alt="Ficha de Crochê 3" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel4.webp" alt="Ficha de Crochê 4" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel5.webp" alt="Ficha de Crochê 5" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel6.webp" alt="Ficha de Crochê 6" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel7.webp" alt="Ficha de Crochê 7" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel8.webp" alt="Ficha de Crochê 1" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel9.webp" alt="Ficha de Crochê 2" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel10.webp" alt="Ficha de Crochê 3" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel11.webp" alt="Ficha de Crochê 4" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel12.webp" alt="Ficha de Crochê 5" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel13.webp" alt="Ficha de Crochê 6" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel14.webp" alt="Ficha de Crochê 7" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
 
                     <!-- Grupo 2 de Imagens (Duplicata para loop contínuo) -->
-                    <img src="./carrossel1.webp" alt="Ficha de Crochê 1" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel2.webp" alt="Ficha de Crochê 2" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel3.webp" alt="Ficha de Crochê 3" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel4.webp" alt="Ficha de Crochê 4" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel5.webp" alt="Ficha de Crochê 5" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel6.webp" alt="Ficha de Crochê 6" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
-                    <img src="./carrossel7.webp" alt="Ficha de Crochê 7" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel8.webp" alt="Ficha de Crochê 1" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel9.webp" alt="Ficha de Crochê 2" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel10.webp" alt="Ficha de Crochê 3" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel11.webp" alt="Ficha de Crochê 4" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel12.webp" alt="Ficha de Crochê 5" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel13.webp" alt="Ficha de Crochê 6" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
+                    <img src="./carrossel14.webp" alt="Ficha de Crochê 7" class="w-[200px] sm:w-[280px] md:w-[320px] aspect-square object-cover p-0 m-0 border-0 flex-shrink-0">
                 </div>
             </div>
         </div>
@@ -1194,3 +1240,4 @@
 
 </body>
 </html>
+
